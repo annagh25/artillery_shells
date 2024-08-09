@@ -29,12 +29,14 @@ CONTENTS
 3. Directory Structure
 .
 ├── README.md		     # This file
+├── CMakeLists.txt	     # CMake configuration file
+├── qml.qrc		     # Qt resource file for bundling QML files
 ├── main.cpp                 # Entry point of the application
-├── Main.qml                 # Main QML file for inventory window
-├── Add_shells_window.qml    # QML file for representing a add view
-├── Remove_shells_window.qml # QML file for representing a remove
-├── History_window.qml	     # QML file for representing
-│			       the history view
+├── qml                      # All .qml files directory
+│   ├── Main.qml		 # Main window
+│   ├── Add_shells_window.qml    # Add shells window
+│   ├── Remove_shells_window.qml # Remove shells window
+│   └── History_window.qml	 # History window
 ├── inventorymodel.cpp       # C++ class for managing inventory data
 ├── inventorymodel.h         # Header file for inventory management
 ├── database.cpp             # C++ class for database interactions
@@ -43,12 +45,26 @@ CONTENTS
 │   └── images/              # Images used in the application
 ├── sql/                     # Directory for SQL scripts
 │   └── create_tables.sql    # SQL script to create database table
-├── docs/                    # Directory for documentation
-│   └── dev_spec.odt         # Development specification file
-└── build/                   # Directory for build artifacts
+└── docs/                    # Directory for documentation
+    └── dev_spec.odt         # Development specification file
 
 4. Build the project
-#TODO
+    To build the project, follow these steps:
+	- Create a Build Directory:
+	    Navigate to your project's root directory,
+	    where the CMakeLists.txt file is located.
+	    Create a new directory named build.
+		mkdir build
+		cd build
+
+	- Generate the Build Files with CMake:
+		cmake ..
+
+	- Compile the Project:
+		make
+
+	- Run the Application:
+	    ./Artillery_shells
 
 5. Testing
 #TODO
