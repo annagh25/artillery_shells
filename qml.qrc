@@ -4,6 +4,7 @@
         <file>qml/Add_shells_window.qml</file>
         <file>qml/Remove_shells_window.qml</file>
         <file>qml/History_window.qml</file>
+	<file>resources/images/logo.jpg</file>
     </qresource>
 </RCC>
 

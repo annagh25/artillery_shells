@@ -27,6 +27,7 @@ qt_add_resources(Artillery_shells "qml_resources"
         qml/Add_shells_window.qml
         qml/Remove_shells_window.qml
         qml/History_window.qml
+	resources/images/logo.jpg
 )
 
 # Link Qt 6 libraries
