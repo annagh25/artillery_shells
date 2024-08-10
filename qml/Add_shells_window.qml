@@ -8,6 +8,8 @@ ApplicationWindow {
     height: 200
     title: "Add Shells"
 
+    signal shellsAdded(string shellType, int quantity)
+
     Column {
         spacing: 20
         anchors.centerIn: parent
@@ -44,7 +46,7 @@ ApplicationWindow {
                 from: 1
                 to: 1000
                 width: 150
-                value: 0
+                value: 1
                 editable: true // Enable direct input
             }
         }
@@ -60,7 +62,10 @@ ApplicationWindow {
                     radius: 5
                 }
                 onClicked: {
-                    // Handle adding shells here
+		    // Emit signal with shell type and quantity
+                    shellsAdded(shellTypeDropdown.currentText, quantityField.value)
+                    quantityField.value = 1; // Reset SpinBox value to 1
+                    close()
                 }
             }
             Button {
@@ -70,7 +75,7 @@ ApplicationWindow {
                     radius: 5
                 }
                 onClicked: {
-                    quantityField.value = 0; // Reset SpinBox value to 0
+                    quantityField.value = 1; // Reset SpinBox value to 0
                     close(); // Close the window
                 }
             }

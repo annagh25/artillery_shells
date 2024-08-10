@@ -8,6 +8,16 @@ ApplicationWindow {
     height: 260 // Adjusted height to fit the table and buttons
     title: "Artillery Inventory Management"
 
+    // Inventory model
+    ListModel {
+        id: inventoryModel
+        ListElement { shellType: "60mm"; inStock: 50; used: 10 }
+        ListElement { shellType: "82mm"; inStock: 30; used: 5 }
+        ListElement { shellType: "100mm"; inStock: 20; used: 2 }
+        ListElement { shellType: "122mm"; inStock: 15; used: 3 }
+        ListElement { shellType: "152mm"; inStock: 10; used: 1 }
+    }
+
     Column {
         spacing: 10
         anchors.centerIn: parent
@@ -87,199 +97,48 @@ ApplicationWindow {
                 }
             }
 
-            // Table Rows
-            Row {
-                spacing: 0
-                Rectangle {
-                    width: 150
-                    height: 30
-                    border.color: "black"
-                    Text {
-                        text: "60mm"
-                        anchors.centerIn: parent
+            // Dynamic Table Rows
+            ListView {
+                width: 450
+                height: 150
+                model: inventoryModel
+                delegate: Row {
+                    spacing: 0
+                    Rectangle {
+                        width: 150
+                        height: 30
+                        border.color: "black"
+                        Text {
+                            text: model.shellType
+                            anchors.centerIn: parent
+                        }
                     }
-                }
-                Rectangle {
-                    width: 100
-                    height: 30
-                    border.color: "black"
-                    Text {
-                        text: "50"
-                        anchors.centerIn: parent
+                    Rectangle {
+                        width: 100
+                        height: 30
+                        border.color: "black"
+                        Text {
+                            text: model.inStock
+                            anchors.centerIn: parent
+                        }
                     }
-                }
-                Rectangle {
-                    width: 100
-                    height: 30
-                    border.color: "black"
-                    Text {
-                        text: "10"
-                        anchors.centerIn: parent
+                    Rectangle {
+                        width: 100
+                        height: 30
+                        border.color: "black"
+                        Text {
+                            text: model.used
+                            anchors.centerIn: parent
+                        }
                     }
-                }
-                Rectangle {
-                    width: 100
-                    height: 30
-                    border.color: "black"
-                    Text {
-                        text: "60"
-                        anchors.centerIn: parent
-                    }
-                }
-            }
-            Row {
-                spacing: 0
-                Rectangle {
-                    width: 150
-                    height: 30
-                    border.color: "black"
-                    Text {
-                        text: "82mm"
-                        anchors.centerIn: parent
-                    }
-                }
-                Rectangle {
-                    width: 100
-                    height: 30
-                    border.color: "black"
-                    Text {
-                        text: "30"
-                        anchors.centerIn: parent
-                    }
-                }
-                Rectangle {
-                    width: 100
-                    height: 30
-                    border.color: "black"
-                    Text {
-                        text: "5"
-                        anchors.centerIn: parent
-                    }
-                }
-                Rectangle {
-                    width: 100
-                    height: 30
-                    border.color: "black"
-                    Text {
-                        text: "35"
-                        anchors.centerIn: parent
-                    }
-                }
-            }
-            Row {
-                spacing: 0
-                Rectangle {
-                    width: 150
-                    height: 30
-                    border.color: "black"
-                    Text {
-                        text: "100mm"
-                        anchors.centerIn: parent
-                    }
-                }
-                Rectangle {
-                    width: 100
-                    height: 30
-                    border.color: "black"
-                    Text {
-                        text: "20"
-                        anchors.centerIn: parent
-                    }
-                }
-                Rectangle {
-                    width: 100
-                    height: 30
-                    border.color: "black"
-                    Text {
-                        text: "2"
-                        anchors.centerIn: parent
-                    }
-                }
-                Rectangle {
-                    width: 100
-                    height: 30
-                    border.color: "black"
-                    Text {
-                        text: "22"
-                        anchors.centerIn: parent
-                    }
-                }
-            }
-            Row {
-                spacing: 0
-                Rectangle {
-                    width: 150
-                    height: 30
-                    border.color: "black"
-                    Text {
-                        text: "122mm"
-                        anchors.centerIn: parent
-                    }
-                }
-                Rectangle {
-                    width: 100
-                    height: 30
-                    border.color: "black"
-                    Text {
-                        text: "15"
-                        anchors.centerIn: parent
-                    }
-                }
-                Rectangle {
-                    width: 100
-                    height: 30
-                    border.color: "black"
-                    Text {
-                        text: "3"
-                        anchors.centerIn: parent
-                    }
-                }
-                Rectangle {
-                    width: 100
-                    height: 30
-                    border.color: "black"
-                    Text {
-                        text: "18"
-                        anchors.centerIn: parent
-                    }
-                }
-            }
-            Row {
-                spacing: 0
-                Rectangle {
-                    width: 150
-                    height: 30
-                    border.color: "black"
-                    Text {
-                        text: "152mm"
-                        anchors.centerIn: parent
-                    }
-                }
-                Rectangle {
-                    width: 100
-                    height: 30
-                    border.color: "black"
-                    Text {
-                        text: "10"
-                        anchors.centerIn: parent
-                    }
-                }
-                Rectangle {
-                    width: 100
-                    height: 30
-                    border.color: "black"
-                    Text {
-                        text: "1"
-                        anchors.centerIn: parent
-                    }
-                }
-                Rectangle {
-                    width: 100
-                    height: 30
-                    border.color: "black"
-                    Text {
-                        text: "11"
-                        anchors.centerIn: parent
+                    Rectangle {
+                        width: 100
+                        height: 30
+                        border.color: "black"
+                        Text {
+                            text: model.inStock + model.used
+                            anchors.centerIn: parent
+                        }
                     }
                 }
             }
@@ -295,8 +154,6 @@ ApplicationWindow {
                 background: Rectangle {
                     color: "#D0D0D0" // Light grey color for buttons
                     border.color: "black"
-                    implicitWidth: childrenRect.width // Automatically adjust width to fit text
-                    implicitHeight: height // Use button's height
                 }
                 onClicked: {
                     add_loader.active = true // Activate the loader to load and show the Add Shells window
@@ -308,11 +165,9 @@ ApplicationWindow {
                 background: Rectangle {
                     color: "#D0D0D0" // Light grey color for buttons
                     border.color: "black"
-                    implicitWidth: childrenRect.width // Automatically adjust width to fit text
-                    implicitHeight: height // Use button's height
                 }
                 onClicked: {
-                    remove_loader.active = true // Activate the loader to load and show the Add Shells window
+                    remove_loader.active = true // Activate the loader to load and show the Remove Shells window
                     remove_loader.item.visible = true // Make the loaded window visible
                 }
             }
@@ -321,15 +176,14 @@ ApplicationWindow {
                 background: Rectangle {
                     color: "#D0D0D0" // Light grey color for buttons
                     border.color: "black"
-                    implicitWidth: childrenRect.width // Automatically adjust width to fit text
-                    implicitHeight: height // Use button's height
                 }
                 onClicked: {
-                    history_loader.active = true // Activate the loader to load and show the Add Shells window
+                    history_loader.active = true // Activate the loader to load and show the History window
                     history_loader.item.visible = true // Make the loaded window visible
                 }
             }
         }
+
         // Loader for Add Shells window
         Loader {
             id: add_loader
@@ -337,18 +191,51 @@ ApplicationWindow {
             active: false // Start inactive
             onLoaded: {
                 item.visible = false // Keep it hidden initially
+                // Handle the signal emitted by Add_shells_window.qml
+                item.shellsAdded.connect(function(shellType, quantity) {
+                    for (var i = 0; i < inventoryModel.count; ++i) {
+                        var item = inventoryModel.get(i)
+                        if (item.shellType === shellType) {
+                            inventoryModel.set(i, {
+                                shellType: item.shellType,
+                                inStock: item.inStock + quantity,
+                                used: item.used
+                            })
+                            return
+                        }
+                    }
+                })
             }
         }
 
+        // Loader for Remove Shells window
         Loader {
             id: remove_loader
             source: "Remove_shells_window.qml"
             active: false // Start inactive
             onLoaded: {
                 item.visible = false // Keep it hidden initially
+                // Ensure the signal connection is established correctly
+                item.shellsRemoved.connect(function(shellType, quantity) {
+                    for (var i = 0; i < inventoryModel.count; ++i) {
+                        var item = inventoryModel.get(i)
+                        if (item.shellType === shellType) {
+                            if (item.inStock >= quantity) {
+                                inventoryModel.set(i, {
+                                    shellType: item.shellType,
+                                    inStock: Math.max(0, item.inStock - quantity),
+                                    used: item.used + quantity
+                                })
+                                return
+                            }
+			    //TODO: Add error box for wrong remove
+                        }
+                    }
+                })
             }
         }
 
+        // Loader for History window
         Loader {
             id: history_loader
             source: "History_window.qml"
