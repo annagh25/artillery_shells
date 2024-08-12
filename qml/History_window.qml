@@ -6,7 +6,7 @@ import com.example.database 1.0
 ApplicationWindow {
     visible: true
     width: 450
-    height: 250
+    height: 300
     title: "Artillery History Management"
 
     // The DatabaseManager instance is passed from Main.qml
