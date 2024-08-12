@@ -1,0 +1,9 @@
+1. Add error message box for informing that can't be removed
+   more shells then in stock.
+2. Disable the main window when other windows are open.
+3. Add filters to main and history windows.
+4. Fix bug in history window.
+   (when remove or add something in history window it shows twice)
+5. When removes more then in stock it don't removes, but shows in history.
+6. Windows sizes.
+7. Devspec
