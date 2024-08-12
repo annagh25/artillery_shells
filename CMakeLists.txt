@@ -13,11 +13,20 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
+set(SOURCES
+    main.cpp
+    database.cpp
+)
+
+set(HEADERS
+    database.h
+)
+
 # Find required Qt 6 components
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Sql)
 
 # Add the executable
-add_executable(Artillery_shells main.cpp)
+add_executable(Artillery_shells ${SOURCES})
 
 # Add QML resources
 qt_add_resources(Artillery_shells "qml_resources"
@@ -31,7 +40,7 @@ qt_add_resources(Artillery_shells "qml_resources"
 )
 
 # Link Qt 6 libraries
-target_link_libraries(Artillery_shells PRIVATE Qt6::Core Qt6::Gui Qt6::Qml Qt6::Quick)
+target_link_libraries(Artillery_shells PRIVATE Qt6::Core Qt6::Gui Qt6::Qml Qt6::Quick Qt6::Sql)
 
 # Suppress the Qt policy warning by setting the policy
 qt_policy(SET QTP0001 NEW)

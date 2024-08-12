@@ -3,11 +3,13 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
 ApplicationWindow {
+    id: removeShellsWindow
     visible: false // Start hidden; will be shown when opened
     width: 300
     height: 200
     title: "Remove Shells"
 
+    property var dbManager // Add a property for dbManager
     signal shellsRemoved(string shellType, int quantity)
 
     Column {
@@ -56,16 +58,28 @@ ApplicationWindow {
             spacing: 20
             anchors.horizontalCenter: parent.horizontalCenter
             Button {
-                text: "Confirm"
+                text: "Confirm Remove"
                 background: Rectangle {
                     color: "lightgrey"
                     radius: 5
                 }
                 onClicked: {
-		    // Emit signal with shell type and quantity
-                    shellsRemoved(shellTypeDropdown.currentText, quantityField.value)
-                    quantityField.value = 1; // Reset SpinBox value to 0
-                    close()
+                    var selectedShellType = shellTypeDropdown.currentText;
+                    var quantity = quantityField.value;
+
+                    // Emit signal with shell type and quantity
+                    shellsRemoved(selectedShellType, quantity);
+
+                    if (dbManager) {
+                        // Call the DatabaseManager method to remove shells
+                        dbManager.removeEntry(selectedShellType, quantity);
+                        dbManager.addHistory(selectedShellType, quantity, "Remove"); // Corrected line
+                    } else {
+                        console.error("dbManager is not defined!");
+                    }
+
+                    quantityField.value = 1; // Reset SpinBox value to 1
+                    close(); // Close the window after removing
                 }
             }
             Button {

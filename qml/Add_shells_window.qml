@@ -3,11 +3,13 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
 ApplicationWindow {
+    id: addShellsWindow
     visible: false // Start hidden; will be shown when opened
     width: 300
     height: 200
     title: "Add Shells"
 
+    property var dbManager // Add a property for dbManager
     signal shellsAdded(string shellType, int quantity)
 
     Column {
@@ -55,6 +57,7 @@ ApplicationWindow {
         Row {
             spacing: 20
             anchors.horizontalCenter: parent.horizontalCenter
+
             Button {
                 text: "Confirm Add"
                 background: Rectangle {
@@ -62,12 +65,29 @@ ApplicationWindow {
                     radius: 5
                 }
                 onClicked: {
-		    // Emit signal with shell type and quantity
-                    shellsAdded(shellTypeDropdown.currentText, quantityField.value)
-                    quantityField.value = 1; // Reset SpinBox value to 1
-                    close()
+                    // Get values from UI
+                    var selectedShellType = shellTypeDropdown.currentText;
+                    var quantity = quantityField.value;
+
+                    // Emit signal to notify that shells have been added
+                    shellsAdded(selectedShellType, quantity);
+
+                    if (dbManager) {
+                        // Call the DatabaseManager method to add shells
+                        dbManager.addEntry(selectedShellType, quantity); // Now should work
+                        dbManager.addHistory(selectedShellType, quantity, "Add"); // Use the correct function
+                    } else {
+                        console.error("dbManager is not defined!");
+                    }
+
+                    // Reset SpinBox value to 1 for the next input
+                    quantityField.value = 1;
+
+                    // Close the window after adding
+                    close();
                 }
             }
+
             Button {
                 text: "Cancel"
                 background: Rectangle {
@@ -75,7 +95,7 @@ ApplicationWindow {
                     radius: 5
                 }
                 onClicked: {
-                    quantityField.value = 1; // Reset SpinBox value to 0
+                    quantityField.value = 1; // Reset SpinBox value to 1
                     close(); // Close the window
                 }
             }

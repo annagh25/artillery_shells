@@ -1,12 +1,49 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import com.example.database 1.0
 
 ApplicationWindow {
     visible: true
     width: 450
     height: 250
     title: "Artillery History Management"
+
+    // The DatabaseManager instance is passed from Main.qml
+    property var dbManager: null
+
+    // Model to store history data
+    ListModel {
+        id: historyModel
+    }
+
+    // Function to load history data from the database
+    function loadHistory() {
+        // Clear the current model
+        historyModel.clear();
+
+        // Check if dbManager is defined
+        if (dbManager) {
+            // Get the history data from the database
+            var historyData = dbManager.getHistory();
+
+            // Populate the model with the retrieved data
+            for (var i = 0; i < historyData.length; i++) {
+                historyModel.append({
+                    "dateTime": historyData[i]["dateTime"],
+                    "action": historyData[i]["action"],
+                    "shell": historyData[i]["shell"],
+                    "qty": historyData[i]["qty"]
+                });
+            }
+        } else {
+            console.error("dbManager is not defined");
+        }
+    }
+
+    Component.onCompleted: {
+        loadHistory(); // Load the history when the window is opened
+    }
 
     Column {
         spacing: 10
@@ -82,17 +119,16 @@ ApplicationWindow {
             }
         }
 
-        // Repeater for dynamic rows
-        Repeater {
-            id: historyRepeater
-            model: ListModel { // Example model, replace with your database query results
-                ListElement { dateTime: "2024-08-01 10:00:00"; action: "Add"; shell: "60mm"; qty: 10 }
-                ListElement { dateTime: "2024-08-01 09:00:00"; action: "Remove"; shell: "82mm"; qty: 5 }
-                ListElement { dateTime: "2024-07-31 12:00:00"; action: "Add"; shell: "100mm"; qty: 20 }
-            }
-
+        // ListView for dynamic rows with scrolling
+        ListView {
+            id: historyListView
+            model: historyModel // This should be your model for displaying history
+            width: 450
+            height: 180 // Adjust height to fit within the window
+            clip: true // Clip the content to the bounds of the ListView
             delegate: Row {
                 spacing: 0
+                width: historyListView.width // Match the width of the ListView
                 Rectangle {
                     width: 150
                     height: 30
@@ -132,25 +168,6 @@ ApplicationWindow {
             }
         }
 
-        // Filter Section
-        /*Row {
-            spacing: 10
-            Rectangle {
-                width: 250
-                height: 30
-                color: "#D0D0D0" // Light grey for dropdown
-                border.color: "black"
-                Text {
-                    text: "Filter by Shell Type"
-                    anchors.centerIn: parent
-                }
-            }
-            ComboBox {
-                width: 100
-                model: ["All", "60mm", "82mm", "100mm", "122mm", "152mm"]
-            }
-        }*/
-
         // Buttons
         Row {
             spacing: 20
@@ -158,14 +175,8 @@ ApplicationWindow {
             anchors.horizontalCenter: parent.horizontalCenter
             Button {
                 text: "Back to Inventory"
-                background: Rectangle {
-                    color: "#D0D0D0" // Light grey color for buttons
-                    border.color: "black"
-                    implicitWidth: childrenRect.width
-                    implicitHeight: height
-                }
                 onClicked: {
-                    // Add functionality to go back to inventory
+                    close(); // Close the history window
                 }
             }
         }

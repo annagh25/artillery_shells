@@ -1,11 +1,12 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import com.example.database 1.0 // Import your DatabaseManager module
 
 ApplicationWindow {
     visible: true
-    width: 450 // Adjusted width to match the table width
-    height: 260 // Adjusted height to fit the table and buttons
+    width: 450
+    height: 260
     title: "Artillery Inventory Management"
 
     // Inventory model
@@ -17,6 +18,9 @@ ApplicationWindow {
         ListElement { shellType: "122mm"; inStock: 15; used: 3 }
         ListElement { shellType: "152mm"; inStock: 10; used: 1 }
     }
+
+    // Create an instance of the DatabaseManager
+    property var dbManager: DatabaseManager {}
 
     Column {
         spacing: 10
@@ -156,8 +160,9 @@ ApplicationWindow {
                     border.color: "black"
                 }
                 onClicked: {
-                    add_loader.active = true // Activate the loader to load and show the Add Shells window
-                    add_loader.item.visible = true // Make the loaded window visible
+                    add_loader.active = true;
+                    add_loader.source = "Add_shells_window.qml";
+                    add_loader.item.visible = true;
                 }
             }
             Button {
@@ -167,8 +172,9 @@ ApplicationWindow {
                     border.color: "black"
                 }
                 onClicked: {
-                    remove_loader.active = true // Activate the loader to load and show the Remove Shells window
-                    remove_loader.item.visible = true // Make the loaded window visible
+                    remove_loader.active = true;
+                    remove_loader.source = "Remove_shells_window.qml"; // Load the Remove window
+                    remove_loader.item.visible = true;
                 }
             }
             Button {
@@ -178,8 +184,11 @@ ApplicationWindow {
                     border.color: "black"
                 }
                 onClicked: {
-                    history_loader.active = true // Activate the loader to load and show the History window
-                    history_loader.item.visible = true // Make the loaded window visible
+                    // Create and show History_window with dbManager passed
+                    var historyWindow = Qt.createComponent("History_window.qml").createObject(parent, { dbManager: dbManager });
+                    if (historyWindow !== null) {
+                        historyWindow.show();
+                    }
                 }
             }
         }
@@ -187,61 +196,49 @@ ApplicationWindow {
         // Loader for Add Shells window
         Loader {
             id: add_loader
-            source: "Add_shells_window.qml"
-            active: false // Start inactive
+            active: false
             onLoaded: {
-                item.visible = false // Keep it hidden initially
-                // Handle the signal emitted by Add_shells_window.qml
+                item.visible = false;
+                item.dbManager = dbManager; // Pass the dbManager to the loaded item
                 item.shellsAdded.connect(function(shellType, quantity) {
                     for (var i = 0; i < inventoryModel.count; ++i) {
-                        var item = inventoryModel.get(i)
+                        var item = inventoryModel.get(i);
                         if (item.shellType === shellType) {
                             inventoryModel.set(i, {
                                 shellType: item.shellType,
                                 inStock: item.inStock + quantity,
                                 used: item.used
-                            })
-                            return
+                            });
+                            return;
                         }
                     }
-                })
+                });
             }
         }
 
         // Loader for Remove Shells window
         Loader {
             id: remove_loader
-            source: "Remove_shells_window.qml"
-            active: false // Start inactive
+            active: false
             onLoaded: {
-                item.visible = false // Keep it hidden initially
-                // Ensure the signal connection is established correctly
+                item.visible = false;
+                item.dbManager = dbManager; // Pass the dbManager to the loaded item
                 item.shellsRemoved.connect(function(shellType, quantity) {
                     for (var i = 0; i < inventoryModel.count; ++i) {
-                        var item = inventoryModel.get(i)
+                        var item = inventoryModel.get(i);
                         if (item.shellType === shellType) {
                             if (item.inStock >= quantity) {
                                 inventoryModel.set(i, {
                                     shellType: item.shellType,
                                     inStock: Math.max(0, item.inStock - quantity),
                                     used: item.used + quantity
-                                })
-                                return
+                                });
+                                return;
                             }
-			    //TODO: Add error box for wrong remove
+                            // TODO: Add error box for wrong remove
                         }
                     }
-                })
-            }
-        }
-
-        // Loader for History window
-        Loader {
-            id: history_loader
-            source: "History_window.qml"
-            active: false // Start inactive
-            onLoaded: {
-                item.visible = false // Keep it hidden initially
+                });
             }
         }
     }

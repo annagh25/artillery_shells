@@ -6,8 +6,7 @@ CONTENTS
     2. Prerequisites
     3. Directory Structure
     4. Build the project
-    5. Testing
-    6. Maintainer
+    5. Maintainer
 
 1. Getting Started
     This a Qt/QML based application designed to manage the inventory of
@@ -37,8 +36,6 @@ CONTENTS
 │   ├── Add_shells_window.qml    # Add shells window
 │   ├── Remove_shells_window.qml # Remove shells window
 │   └── History_window.qml	 # History window
-├── inventorymodel.cpp       # C++ class for managing inventory data
-├── inventorymodel.h         # Header file for inventory management
 ├── database.cpp             # C++ class for database interactions
 ├── database.h               # Header file for database management
 ├── resources/               # Directory for resources(e.g., images)
@@ -66,8 +63,5 @@ CONTENTS
 	- Run the Application:
 	    ./Artillery_shells
 
-5. Testing
-#TODO
-
-6. Maintainer
+5. Maintainer
     Anna Ghazaryan
